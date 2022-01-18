@@ -1,0 +1,11 @@
+body {
+    margin: 0 !important;
+}
+.header {
+    background-color: darkblue;
+    height: 38px;
+    padding: 10px;
+}
+.checkbox {
+    width: 90px !important;
+}
