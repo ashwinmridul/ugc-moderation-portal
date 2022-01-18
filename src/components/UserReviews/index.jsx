@@ -5,7 +5,7 @@ export default ({uidx}) => {
 
     useEffect(() => {
         fetch(`/getReviewsByUser/${uidx}`).then(response => setData(response));
-    }, []);
+    }, [uidx]);
 
     return <div>Reviews for user {uidx}</div>;
 }

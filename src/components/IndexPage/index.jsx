@@ -32,6 +32,11 @@ const IndexPage = () => {
             setShowData(true);
     };
 
+    const onChangeInput = (event) => {
+        setShowData(false);
+        setInputText(event.target.value);
+    };
+
     return (<MainContainer>
         <Box
             component="form"
@@ -51,7 +56,7 @@ const IndexPage = () => {
                     <FormControlLabel value={REVIEW_BY.STYLE} control={<Radio />} label="Style id" />
                 </RadioGroup>
             </FormControl>
-            <TextField id="standard-basic" value={inputText} onChange={(event) => setInputText(event.target.value)} label={reviewBy === REVIEW_BY.USER ? 'Enter uidx' : 'Enter style id'} variant="standard" />
+            <TextField id="standard-basic" value={inputText} onChange={onChangeInput} label={reviewBy === REVIEW_BY.USER ? 'Enter uidx' : 'Enter style id'} variant="standard" />
             <Button onClick={fetchReviews} variant="contained">Fetch Reviews</Button>
         </Box>
         {showData && (reviewBy === REVIEW_BY.USER ? <UserReviews uidx={inputText} /> : <StyleReviews styleId={inputText} />)}
