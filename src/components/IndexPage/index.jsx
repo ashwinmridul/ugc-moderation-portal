@@ -5,11 +5,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import UserReviews from '../UserReviews';
 import StyleReviews from '../StyleReviews';
-import { MainContainer } from './styles';
+import { MainContainer, SearchBar } from './styles';
 
 const REVIEW_BY = {
     USER: 'user',
@@ -56,7 +55,7 @@ const IndexPage = () => {
                     <FormControlLabel value={REVIEW_BY.STYLE} control={<Radio />} label="Style id" />
                 </RadioGroup>
             </FormControl>
-            <TextField id="standard-basic" value={inputText} onChange={onChangeInput} label={reviewBy === REVIEW_BY.USER ? 'Enter uidx' : 'Enter style id'} variant="standard" />
+            <SearchBar value={inputText} onChange={onChangeInput} label={reviewBy === REVIEW_BY.USER ? 'Enter uidx' : 'Enter style id'} variant="standard" />
             <Button onClick={fetchReviews} variant="contained">Fetch Reviews</Button>
         </Box>
         {showData && (reviewBy === REVIEW_BY.USER ? <UserReviews uidx={inputText} /> : <StyleReviews styleId={inputText} />)}
