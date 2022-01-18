@@ -37,12 +37,28 @@ let router = express.Router();
 
 // API ROUTES
 
+const sendResponse = (res, err, response) => {
+    if (err) {
+        res.status(response.statusCode).send(err);
+    }
+    res.status(response.statusCode).send(response.body);
+};
+
 app.get('/getReviewsByUser/:uidx', (req, res) => {
-    superagent.get(`${API_HOST}/v1/reviews/user?page=1&size=10`).set('x-mynt-ctx', `storeid=2297;uidx=${req.params.uidx};`).end((err, response) => {
-        if (err) {
-            res.status(500).send(err);
-        }
-        res.status(200).send(response.body);
+    superagent
+    .get(`${API_HOST}/v1/reviews/user?page=1&size=10`)
+    .set('x-mynt-ctx', `storeid=2297;uidx=${req.params.uidx};`)
+    .end((err, response) => {
+        sendResponse(res, err, response);
+    });
+});
+
+app.get('/getReviewsByProduct/:styleId', (req, res) => {
+    superagent
+    .get(`${API_HOST}/v1/reviews/product/${req.params.styleId}?size=${req.query.size}&sort=0&rating=0&page=${req.query.page}&includeMetaData=true`)
+    .set('x-mynt-ctx', `storeid=2297;uidx=1238f5c4.2cd5.42ce.9b53.9a34596e901an3CPB3C6pJ;`)
+    .end((err, response) => {
+        sendResponse(res, err, response);
     });
 });
 
