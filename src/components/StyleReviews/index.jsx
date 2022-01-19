@@ -27,6 +27,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { Separator, UploadedImage } from './styles';
 import ConfirmationBox from '../ConfirmationBox';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const PAGE_SIZE = 10;
 
@@ -51,7 +52,7 @@ const Row = ({ row, fetchReviews }) => {
             comment: overallComments,
             images
         };
-        fetch('/submitReview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)});
+        fetch('/submitReview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)}).then(() => fetchReviews());
     };
 
     const onApprove = () => {
@@ -59,9 +60,8 @@ const Row = ({ row, fetchReviews }) => {
             title: 'Approve Review',
             content: 'Are you sure you want to approve this review?',
             onAccept: () => {
-                submitReview('ACTIVE');
+                submitReview('APPROVED');
                 setConfirmationProps(undefined);
-                fetchReviews();
             },
             onReject: () => {
                 setConfirmationProps(undefined);
@@ -76,7 +76,6 @@ const Row = ({ row, fetchReviews }) => {
             onAccept: () => {
                 submitReview('REJECTED');
                 setConfirmationProps(undefined);
-                fetchReviews();
             },
             onReject: () => {
                 setConfirmationProps(undefined);
@@ -89,7 +88,7 @@ const Row = ({ row, fetchReviews }) => {
             title: 'Delete Review',
             content: 'Are you sure you want to delete this review?',
             onAccept: () => {
-                fetch(`/${row.id}`, { method: 'DELETE' })
+                fetch(`/review/${row.id}`, { method: 'DELETE' })
                     .then(response => console.log(response));
                 setConfirmationProps(undefined);
                 fetchReviews();
@@ -235,7 +234,9 @@ export default ({styleId}) => {
     }, [styleId]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+        </Box>;
     }
 
     return <TableContainer component={Paper}>

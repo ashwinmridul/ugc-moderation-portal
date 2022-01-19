@@ -27,10 +27,11 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { Separator, UploadedImage } from './styles';
 import ConfirmationBox from '../ConfirmationBox';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const PAGE_SIZE = 10;
 
-const Row = ({ row, fetchReviews }) => {
+const Row = ({ row, fetchReviews, uidx }) => {
     const [open, setOpen] = useState(false);
     const [overallComments, setOverallComments] = useState('');
     const [confirmationProps, setConfirmationProps] = useState(undefined);
@@ -51,7 +52,7 @@ const Row = ({ row, fetchReviews }) => {
             comment: overallComments,
             images
         };
-        fetch('/submitReview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)});
+        fetch('/submitReview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)}).then(() => fetchReviews());
     };
 
     const onApprove = () => {
@@ -59,9 +60,8 @@ const Row = ({ row, fetchReviews }) => {
             title: 'Approve Review',
             content: 'Are you sure you want to approve this review?',
             onAccept: () => {
-                submitReview('ACTIVE');
+                submitReview('APPROVED');
                 setConfirmationProps(undefined);
-                fetchReviews();
             },
             onReject: () => {
                 setConfirmationProps(undefined);
@@ -76,7 +76,6 @@ const Row = ({ row, fetchReviews }) => {
             onAccept: () => {
                 submitReview('REJECTED');
                 setConfirmationProps(undefined);
-                fetchReviews();
             },
             onReject: () => {
                 setConfirmationProps(undefined);
@@ -89,10 +88,9 @@ const Row = ({ row, fetchReviews }) => {
             title: 'Delete Review',
             content: 'Are you sure you want to delete this review?',
             onAccept: () => {
-                fetch(`/${row.id}`, { method: 'DELETE' })
-                    .then(response => console.log(response));
+                fetch(`/review/${row.id}/${uidx}`, { method: 'DELETE' })
+                    .then(() => fetchReviews());
                 setConfirmationProps(undefined);
-                fetchReviews();
             },
             onReject: () => {
                 setConfirmationProps(undefined);
@@ -239,7 +237,9 @@ export default ({uidx}) => {
     }, [uidx]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+        </Box>;
     }
 
     return <TableContainer component={Paper}>
@@ -256,7 +256,7 @@ export default ({uidx}) => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {data.map(row => <Row key={row.updatedAt} row={row} fetchReviews={fetchReviews} />)}
+                {data.map(row => <Row key={row.updatedAt} row={row} fetchReviews={fetchReviews} uidx={uidx} />)}
             </TableBody>
             <TableFooter>
                 <TableRow>
