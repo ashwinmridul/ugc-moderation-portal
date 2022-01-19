@@ -9,8 +9,15 @@ import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button, Checkbox, FormControl, IconButton, ImageList, ImageListItem, TextField } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import TextField from '@mui/material/TextField';
+import Delete from '@mui/icons-material/Delete';
 import Collapse from '@mui/material/Collapse';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -36,7 +43,7 @@ const Row = ({ row, fetchReviews }) => {
                 comment: image.comment || ''
             };
         });
-        const data = {
+        const body = {
             entityId: row.id,
             entityType: 'PRODUCT_REVIEW',
             domain: 'MYNTRA',
@@ -44,7 +51,7 @@ const Row = ({ row, fetchReviews }) => {
             comment: overallComments,
             images
         };
-        console.log(data);
+        fetch('/submitReview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)});
     };
 
     const onApprove = () => {
@@ -82,7 +89,8 @@ const Row = ({ row, fetchReviews }) => {
             title: 'Delete Review',
             content: 'Are you sure you want to delete this review?',
             onAccept: () => {
-                console.log(`Delete review ${row.id}`);
+                fetch(`/${row.id}`, { method: 'DELETE' })
+                    .then(response => console.log(response));
                 setConfirmationProps(undefined);
                 fetchReviews();
             },
