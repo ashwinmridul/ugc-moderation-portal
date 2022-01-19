@@ -1,13 +1,3 @@
-// const path = require("path");
-// const express = require("express");
-// let  app = express();
-
-// app.get('/', (req, res) => res.sendFile(path.join(__dirname, "static", "index.html")));
-// app.use(express.static('src/static'));
-
-// app.listen(3000,  () => console.log("Example app listening on port 3000!"));
-
-
 import path from 'path';
 import { Server } from 'http';
 import Express from 'express';
@@ -22,7 +12,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const superagent = require('superagent');
 
-const API_HOST = 'http://0.0.0.0:3333'
+const API_HOST = 'http://0.0.0.0:3333';
+const RATINGS_HOST = 'http://0.0.0.0:8080';
 
 // var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,10 +29,7 @@ let router = express.Router();
 // API ROUTES
 
 const sendResponse = (res, err, response) => {
-    if (err) {
-        res.status(response.statusCode).send(err);
-    }
-    res.status(response.statusCode).send(response.body);
+    res.status(response.statusCode).send(err ? err : response.body);
 };
 
 app.get('/getReviewsByUser/:uidx', (req, res) => {
@@ -56,6 +44,25 @@ app.get('/getReviewsByUser/:uidx', (req, res) => {
 app.get('/getReviewsByProduct/:styleId', (req, res) => {
     superagent
     .get(`${API_HOST}/v1/reviews/product/${req.params.styleId}?size=${req.query.size}&sort=0&rating=0&page=${req.query.page}&includeMetaData=true`)
+    .set('x-mynt-ctx', `storeid=2297;uidx=1238f5c4.2cd5.42ce.9b53.9a34596e901an3CPB3C6pJ;`)
+    .end((err, response) => {
+        sendResponse(res, err, response);
+    });
+});
+
+app.post('/submitReview', (req, res) => {
+    superagent
+    .post(`${RATINGS_HOST}/ratings-external/myntra/update-entity-moderation-status`)
+    .set('x-mynt-ctx', `storeid=2297;uidx=1238f5c4.2cd5.42ce.9b53.9a34596e901an3CPB3C6pJ;`)
+    .send(req.body)
+    .end((err, response) => {
+        sendResponse(res, err, response);
+    });
+});
+
+app.delete('/:reviewId', (req, res) => {
+    superagent
+    .delete(`${API_HOST}/v1/reviews/review/${req.params.reviewId}`)
     .set('x-mynt-ctx', `storeid=2297;uidx=1238f5c4.2cd5.42ce.9b53.9a34596e901an3CPB3C6pJ;`)
     .end((err, response) => {
         sendResponse(res, err, response);
