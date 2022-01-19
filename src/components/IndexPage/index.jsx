@@ -72,6 +72,7 @@ const IndexPage = () => {
                 <FormControl sx={{marginLeft: 3}} variant="standard">
                     <InputLabel htmlFor="search-bar">{reviewBy === REVIEW_BY.USER ? 'Enter uidx' : 'Enter style id'}</InputLabel>
                     <SearchBar
+                        autoComplete='off'
                         id="search-bar"
                         value={inputText}
                         onChange={onChangeInput}

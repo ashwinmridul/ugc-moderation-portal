@@ -28,6 +28,10 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import { Separator, UploadedImage } from './styles';
 import ConfirmationBox from '../ConfirmationBox';
 import CircularProgress from '@mui/material/CircularProgress';
+import Icon from '@mui/material/Icon';
+import Star from '@mui/icons-material/Star';
+import { RATING } from '../../constants/colors';
+import StarBorder from '@mui/icons-material/StarBorder';
 
 const PAGE_SIZE = 10;
 
@@ -110,9 +114,12 @@ const Row = ({ row, fetchReviews, uidx }) => {
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
-          <TableCell>{row.updatedAt}</TableCell>
+          <TableCell>{(new Date(Number(row.updatedAt))).toLocaleDateString()}</TableCell>
           <TableCell>{row.style.id}</TableCell>
-          <TableCell>{row.userRating}</TableCell>
+          <TableCell sx={{width: 100}}>
+              {(new Array(row.userRating)).fill().map((f, i) => <Icon key={i} fontSize='small' sx={{color: RATING[row.userRating]}}><Star /></Icon>)}
+              {(new Array(5 - row.userRating)).fill().map((f, i) => <Icon key={i} fontSize='small' sx={{color: RATING[row.userRating]}}><StarBorder /></Icon>)}
+          </TableCell>
           <TableCell>{row.review}</TableCell>
           <TableCell>{row.status}</TableCell>
           <TableCell><IconButton onClick={onDelete} aria-label="Delete review"><Delete /></IconButton></TableCell>
