@@ -251,7 +251,7 @@ export default ({styleId}) => {
             <TableHead>
                 <TableRow>
                     <TableCell />
-                    <TableCell><b>Time</b></TableCell>
+                    <TableCell><b>Date</b></TableCell>
                     <TableCell><b>User Name</b></TableCell>
                     <TableCell><b>Rating</b></TableCell>
                     <TableCell><b>Review</b></TableCell>
