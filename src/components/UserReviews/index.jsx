@@ -226,8 +226,11 @@ export default ({uidx}) => {
 
     const onPageChange = (event, newPage) => {
         setPage(newPage);
-        fetchReviews();
     };
+
+    useEffect(() => {
+      fetchReviews();
+    }, [page])
 
     useEffect(() => {
         setPage(0);
