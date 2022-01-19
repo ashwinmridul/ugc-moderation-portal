@@ -254,7 +254,7 @@ export default ({uidx}) => {
             <TableHead>
                 <TableRow>
                     <TableCell />
-                    <TableCell><b>Time</b></TableCell>
+                    <TableCell><b>Date</b></TableCell>
                     <TableCell><b>Style ID</b></TableCell>
                     <TableCell><b>Rating</b></TableCell>
                     <TableCell><b>Review</b></TableCell>
