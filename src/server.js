@@ -60,10 +60,10 @@ app.post('/submitReview', (req, res) => {
     });
 });
 
-app.delete('/:reviewId', (req, res) => {
+app.delete('/review/:reviewId/:uidx', (req, res) => {
     superagent
     .delete(`${API_HOST}/v1/reviews/review/${req.params.reviewId}`)
-    .set('x-mynt-ctx', `storeid=2297;uidx=1238f5c4.2cd5.42ce.9b53.9a34596e901an3CPB3C6pJ;`)
+    .set('x-mynt-ctx', `storeid=2297;uidx=${req.params.uidx};`)
     .end((err, response) => {
         sendResponse(res, err, response);
     });
