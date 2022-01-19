@@ -34,7 +34,7 @@ const sendResponse = (res, err, response) => {
 
 app.get('/getReviewsByUser/:uidx', (req, res) => {
     superagent
-    .get(`${API_HOST}/v1/reviews/user?page=1&size=10`)
+    .get(`${API_HOST}/v1/reviews/user?size=${req.query.size}&sort=0&rating=0&page=${req.query.page}`)
     .set('x-mynt-ctx', `storeid=2297;uidx=${req.params.uidx};`)
     .end((err, response) => {
         sendResponse(res, err, response);
